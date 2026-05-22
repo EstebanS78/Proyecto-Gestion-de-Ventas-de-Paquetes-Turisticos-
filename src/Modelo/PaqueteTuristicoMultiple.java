@@ -1,0 +1,56 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package Modelo;
+
+import java.util.ArrayList;
+
+/**
+ *
+ * @author Admin
+ */
+public final class PaqueteTuristicoMultiple extends PaqueteTuristico {
+    private String obsequio;
+
+    public PaqueteTuristicoMultiple(String obsequio, String codigo, String nombre, String tipologiaTurismo, String descripcion, String origen, ArrayList<Destino> susDestinos, boolean hotel, boolean alimentacion, boolean alimentacionTodo, boolean vuelo, boolean asistencia, int tarifaDia, int CantidadUnidades) {
+        super(codigo, nombre, tipologiaTurismo, descripcion, origen, susDestinos, hotel, alimentacion, alimentacionTodo, vuelo, asistencia, tarifaDia, CantidadUnidades);
+        this.obsequio = obsequio;
+    }
+
+    public String getObsequio() {
+        return obsequio;
+    }
+
+    public void setObsequio(String obsequio) {
+        this.obsequio = obsequio;
+    }
+
+    @Override
+    public String toString() {
+        return "PaqueteTuristicoMultiple{" 
+                + super.toString()
+                + "obsequio=" + obsequio + '}';
+    }
+    
+    @Override
+    public int calcularValorUnidad(){
+        int resultado = 0;
+        for(Destino D : susDestinos){
+            resultado += D.getDiasPermanencia();
+        }
+        resultado = (int) (resultado*tarifaDia+(0.1*tarifaDia*susDestinos.size()));
+        return resultado;
+    }
+    
+    public Destino obtenerDestinoInicial(){
+        return susDestinos.getFirst();
+        
+    }
+    
+    public Destino obtenerDestinoFinal(){
+        return susDestinos.getLast();
+        
+    }
+    
+}
