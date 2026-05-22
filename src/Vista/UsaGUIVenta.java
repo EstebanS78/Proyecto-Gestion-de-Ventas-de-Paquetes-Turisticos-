@@ -4,6 +4,16 @@
  */
 package Vista;
 
+import Modelo.Cliente;
+import Modelo.Destino;
+import Modelo.PaqueteTuristico;
+import Modelo.PaqueteTuristicoMultiple;
+import Modelo.PaqueteTuristicoUnico;
+import Modelo.Venta;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Admin
@@ -42,6 +52,115 @@ public class UsaGUIVenta extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    ArrayList<Venta> datosVentas;
+    ArrayList<Cliente> datosClientes;
+    
+    public static int generarNumeroVenta(ArrayList<Venta> datosVentas){
+        if(datosVentas.isEmpty()){
+            return 1;
+        } else {
+            int maxNumero = 0;
+            for(Venta v : datosVentas){
+                if(v.getNumero() > maxNumero){
+                    maxNumero = v.getNumero();
+                }
+            }
+            return maxNumero + 1;
+        }
+    }
+    
+    public ArrayList<Venta> crearNuevaVenta(ArrayList<Venta> datosVentas){
+        //Venta
+        int numero = generarNumeroVenta(datosVentas);
+        LocalDateTime fechaHoraGeneracion = LocalDateTime.now(); 
+        LocalDateTime fechaHoraActualizacion = LocalDateTime.now(); 
+        Cliente suCliente;
+        
+        //Datos del Cliente
+        
+        char tipoID = JOptionPane.showInputDialog("Tipo identificación (C: Cédula, N: Nit)").charAt(0);
+        String numID = JOptionPane.showInputDialog("Número de identificación:");
+        int esEmpresaInt = JOptionPane.showConfirmDialog(null, "¿Es una empresa?", "Tipo cliente", JOptionPane.YES_NO_OPTION); 
+        boolean esEmpresa = (esEmpresaInt == JOptionPane.YES_OPTION);
+        String nombre = JOptionPane.showInputDialog(esEmpresa ? "Razón social:" : "Nombre completo:");
+        String email = JOptionPane.showInputDialog("Email:");
+        String telefono = JOptionPane.showInputDialog("Teléfono:");
+        String nombreContacto = JOptionPane.showInputDialog("Nombre de contacto:");
+        double descuento = Double.parseDouble(JOptionPane.showInputDialog("Porcentaje de descuento (0-70):"));
+        
+        suCliente = new Cliente (tipoID, numID, esEmpresa, nombre, email, telefono, nombreContacto, descuento);
+        
+        //Paquetes turisticos
+        
+        ArrayList<PaqueteTuristico> susPaquetesTuristicos = new ArrayList<>();
+        int cantidadPaquetes = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos paquetes incluye esta venta?"));
+        
+        for(int i=0; i<cantidadPaquetes; i++){
+                JOptionPane.showMessageDialog(null, "--- DATOS DEL PAQUETE " + (i+1) + " ---");
+                
+                String categoria = JOptionPane.showInputDialog("Categoría (U: Único, M: Múltiple)").toUpperCase();
+                String codigo = JOptionPane.showInputDialog("Código del paquete:");
+                String nombrePaq = JOptionPane.showInputDialog("Nombre del paquete (mínimo 10 caracteres):");
+                String tipologia = JOptionPane.showInputDialog("Tipología (negocios, recreación, educativo, ecológico):");
+                String descripcion = JOptionPane.showInputDialog("Descripción:");
+                String origen = JOptionPane.showInputDialog("Origen (lugar de partida):");
+                
+                // Destinos
+                ArrayList<Destino> susDestinos = new ArrayList<>();
+                int numDestinos = Integer.parseInt(JOptionPane.showInputDialog("¿Cuántos destinos incluye?"));
+                for(int j=0; j<numDestinos; j++){
+                    String lugar = JOptionPane.showInputDialog("Nombre del destino " + (j+1) + ":");
+                    int dias = Integer.parseInt(JOptionPane.showInputDialog("Días de permanencia:"));
+                    int atractivosInt = JOptionPane.showConfirmDialog(null, "¿Incluye atractivos turísticos?", "Atractivos", JOptionPane.YES_NO_OPTION);
+                    boolean atractivos = (atractivosInt == JOptionPane.YES_OPTION);
+                    susDestinos.add(new Destino(lugar, dias, atractivos));
+                }
+                
+                int hotelInt = JOptionPane.showConfirmDialog(null, "¿Incluye hotel?", "Hotel", JOptionPane.YES_NO_OPTION);
+                boolean hotel = (hotelInt == JOptionPane.YES_OPTION);
+                int alimentacionInt = JOptionPane.showConfirmDialog(null, "¿Incluye alimentación?", "Alimentación", JOptionPane.YES_NO_OPTION);
+                boolean alimentacion = (alimentacionInt == JOptionPane.YES_OPTION);
+                boolean alimentacionTodo = false;
+                if(alimentacion){
+                    int alimentacionTodoInt = JOptionPane.showConfirmDialog(null, "¿Alimentación todo incluido?", "Tipo alimentación", JOptionPane.YES_NO_OPTION);
+                    alimentacionTodo = (alimentacionTodoInt == JOptionPane.YES_OPTION);
+                }
+                int vueloInt = JOptionPane.showConfirmDialog(null, "¿Incluye vuelo?", "Vuelo", JOptionPane.YES_NO_OPTION);
+                boolean vuelo = (vueloInt == JOptionPane.YES_OPTION);
+                int asistenciaInt = JOptionPane.showConfirmDialog(null, "¿Incluye asistencia?", "Asistencia", JOptionPane.YES_NO_OPTION);
+                boolean asistencia = (asistenciaInt == JOptionPane.YES_OPTION);
+                int tarifaDia = Integer.parseInt(JOptionPane.showInputDialog("Tarifa por día:"));
+                int cantidadUnidades = Integer.parseInt(JOptionPane.showInputDialog("Cantidad de unidades:"));
+                
+                if(categoria.equals("U")){
+                    String nombreHotel = JOptionPane.showInputDialog("Nombre del hotel:");
+                    String tipoDesayuno = null;
+                    if(alimentacion){
+                        tipoDesayuno = JOptionPane.showInputDialog("Tipo de desayuno (Buffet, Americano, etc.):");
+                    }
+                    PaqueteTuristicoUnico objPaqueteUnico = new PaqueteTuristicoUnico(codigo, nombrePaq, tipologia, descripcion, 
+                            origen, susDestinos, hotel, alimentacion, alimentacionTodo, vuelo, asistencia, 
+                            tarifaDia, cantidadUnidades, nombreHotel, tipoDesayuno);
+                    susPaquetesTuristicos.add(objPaqueteUnico);
+                } else {
+                    String obsequio = JOptionPane.showInputDialog("Obsequio del paquete:");
+                    PaqueteTuristicoMultiple objPaqueteMultiple = new PaqueteTuristicoMultiple(codigo, nombrePaq, tipologia, descripcion,
+                            origen, susDestinos, hotel, alimentacion, alimentacionTodo, vuelo, asistencia,
+                            tarifaDia, cantidadUnidades, obsequio);
+                    susPaquetesTuristicos.add(objPaqueteMultiple);
+                }
+            }
+        
+        char estado; 
+        
+        Venta objVenta = new Venta(numero, fechaHoraGeneracion, fechaHoraActualizacion, suCliente, susPaquetesTuristicos, estado);
+        
+        datosVentas.add(objVenta);
+        return datosVentas;
+    }
+    
+    
+    
     /**
      * @param args the command line arguments
      */
