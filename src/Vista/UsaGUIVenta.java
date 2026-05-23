@@ -138,15 +138,15 @@ public class UsaGUIVenta extends javax.swing.JFrame {
                     if(alimentacion){
                         tipoDesayuno = JOptionPane.showInputDialog("Tipo de desayuno (Buffet, Americano, etc.):");
                     }
-                    PaqueteTuristicoUnico objPaqueteUnico = new PaqueteTuristicoUnico(codigo, nombrePaq, tipologia, descripcion, 
+                    PaqueteTuristicoUnico objPaqueteUnico = new PaqueteTuristicoUnico(nombreHotel, tipoDesayuno, codigo, nombrePaq, tipologia, descripcion, 
                             origen, susDestinos, hotel, alimentacion, alimentacionTodo, vuelo, asistencia, 
-                            tarifaDia, cantidadUnidades, nombreHotel, tipoDesayuno);
+                            tarifaDia, cantidadUnidades);
                     susPaquetesTuristicos.add(objPaqueteUnico);
                 } else {
                     String obsequio = JOptionPane.showInputDialog("Obsequio del paquete:");
-                    PaqueteTuristicoMultiple objPaqueteMultiple = new PaqueteTuristicoMultiple(codigo, nombrePaq, tipologia, descripcion,
+                    PaqueteTuristicoMultiple objPaqueteMultiple = new PaqueteTuristicoMultiple(obsequio, codigo, nombrePaq, tipologia, descripcion,
                             origen, susDestinos, hotel, alimentacion, alimentacionTodo, vuelo, asistencia,
-                            tarifaDia, cantidadUnidades, obsequio);
+                            tarifaDia, cantidadUnidades);
                     susPaquetesTuristicos.add(objPaqueteMultiple);
                 }
             }

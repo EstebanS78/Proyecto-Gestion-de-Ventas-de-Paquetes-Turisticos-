@@ -44,12 +44,12 @@ public final class PaqueteTuristicoMultiple extends PaqueteTuristico {
     }
     
     public Destino obtenerDestinoInicial(){
-        return susDestinos.getFirst();
+        return susDestinos.get(0);
         
     }
     
     public Destino obtenerDestinoFinal(){
-        return susDestinos.getLast();
+        return susDestinos.get(susDestinos.size()-1);
         
     }
     

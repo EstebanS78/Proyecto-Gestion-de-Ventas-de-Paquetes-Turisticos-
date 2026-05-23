@@ -102,9 +102,7 @@ public class Venta {
     
     public int calcularValorTotalPaquetes(){
         int resultado = 0;
-//        for(int i=0; i<susPaquetesTuristicos.size();i++){
-//            resultado += susPaquetesTuristicos.get(i).calcularValorTotal();
-//        }
+
         for(PaqueteTuristico PT : susPaquetesTuristicos){
             resultado += PT.calcularValorTotal();
         }
@@ -112,7 +110,7 @@ public class Venta {
     }
     
     public int calcularValorTotalDescuento(){
-        int resultado = (int) (calcularValorTotalPaquetes()*suCliente.getPorcentajeDescuento()); //valor total paquetes * porcentaje descuento cliente
+        int resultado = (int) (calcularValorTotalPaquetes()*(suCliente.getPorcentajeDescuento()/100)); //valor total paquetes * porcentaje descuento cliente
 
         return resultado;
     }
